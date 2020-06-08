@@ -9,6 +9,11 @@ watchdog = "*"
 [packages]
 flask = "*"
 python-dotenv = "*"
+flask-bootstrap = "*"
+flask-mail = "*"
+flask-sqlalchemy = "*"
+flask-ckeditor = "*"
+flask-moment = "*"
 
 [requires]
 python_version = "3.7"
