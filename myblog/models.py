@@ -22,6 +22,7 @@ class Post(db.Model):
     timestamp=db.Column(db.DateTime,default=datetime.utcnow)
     category_id=db.Column(db.Integer,db.ForeignKey('category.id'))
     category=db.relationship('Category',back_populates='posts')
+    comments=db.relationship('Comment',backref='post',cascade='all,delete-orphan')
 
 class Comment(db.Model):
     id=db.Column(db.Integer,primary_key=True)
@@ -32,3 +33,8 @@ class Comment(db.Model):
     from_admin=db.Column(db.Boolean,default=False) # 评论是否来自于管理员
     reviewed=db.Column(db.Boolean,default=False)   # 判断评论是否通过审查
     timestamp=db.Column(db.DateTime,default=datetime.utcnow,index=True)
+    post_id=db.Column(db.Integer,db.ForeignKey(post.id))
+    post=db.relationship('Post',back_populates='comments')
+    replied_id=db.Column(db.Integer,db.ForeignKey('comment.id'))
+    replied=db.relationship('Comment',back_populates='replies',remote_side=[id])
+    replies=db.relationship('Comment',back_populates='replied',cascade='all')
