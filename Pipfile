@@ -15,6 +15,7 @@ flask-mail = "*"
 flask-sqlalchemy = "*"
 flask-ckeditor = "*"
 flask-moment = "*"
+flask-wtf = "*"
 
 [requires]
 python_version = "3.7"

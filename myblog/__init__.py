@@ -56,6 +56,7 @@ def register_commands(app):
     @click.option('--post', default=50, help='Quantity of post,default is 50.')
     @click.option('--comment', default=500, help='Quantity of comments,default is 500.')
     def forge(category,post,comment):
+        """Generate fake data."""
         from myblog.fakes import fake_admin,fake_categories,fake_posts,fake_comments
 
         db.drop_all()
