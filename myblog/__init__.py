@@ -3,7 +3,8 @@ from myblog.blueprints.auth import auth_bp
 from myblog.blueprints.admin import admin_bp
 from myblog.blueprints.blog import blog_bp
 from myblog.settings import config
-from myblog.extensions import bootstrap,mail,moment,db,ckeditor
+from myblog.extensions import bootstrap,mail,moment,db,ckeditor,migrate
+from myblog.models import Admin,Category,Post,Comment
 import os,click
 
 def create_app(config_name=None):
@@ -31,6 +32,7 @@ def register_extensions(app):
     ckeditor.init_app(app)
     moment.init_app(app)
     mail.init_app(app)
+    migrate.init_app(app,db)
 
 def register_blueprints(app):
     app.register_blueprint(blog_bp)
@@ -43,7 +45,11 @@ def register_shell_content(app):
         return dict(db=db)
 
 def register_template_context(app):
-    pass
+    @app.context_processor
+    def make_template_context():
+        admin=Admin.query.first()
+        categories=Category.query.order_by(Category.name).all()
+        return dict(admin=admin,categories=categories)
 
 def register_errors(app):
     @app.errorhandler(400)
@@ -56,6 +62,7 @@ def register_commands(app):
     @click.option('--post', default=50, help='Quantity of post,default is 50.')
     @click.option('--comment', default=500, help='Quantity of comments,default is 500.')
     def forge(category,post,comment):
+        """Generate fake data."""
         from myblog.fakes import fake_admin,fake_categories,fake_posts,fake_comments
 
         db.drop_all()
