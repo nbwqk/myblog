@@ -10,13 +10,13 @@ faker = "*"
 [packages]
 flask = "*"
 python-dotenv = "*"
-flask-bootstrap = "*"
 flask-mail = "*"
 flask-sqlalchemy = "*"
 flask-ckeditor = "*"
 flask-moment = "*"
 flask-wtf = "*"
 flask-migrate = "*"
+bootstrap-flask = "*"
 
 [requires]
 python_version = "3.7"
