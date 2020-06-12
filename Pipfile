@@ -17,6 +17,7 @@ flask-moment = "*"
 flask-wtf = "*"
 flask-migrate = "*"
 bootstrap-flask = "*"
+unidecode = "*"
 
 [requires]
 python_version = "3.7"
