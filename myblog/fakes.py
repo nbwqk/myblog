@@ -11,6 +11,7 @@ def fake_admin():                 # 生成虚拟管理员
                 blog_sub_title="No.I'm the real thing.",
                 name='Mima Kirigoe',
                 about='Um,I,Mima Kirigoe,had a fun times as a member of CHAM...')
+    admin.set_password('helloflask')
     db.session.add(admin)
     db.session.commit()
 

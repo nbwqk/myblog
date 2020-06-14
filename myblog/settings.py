@@ -18,6 +18,8 @@ class BaseConfig(object):
     MYBLOG_POST_PER_PAGE=10
     MYBLOG_MANAGE_POST_PER_PAGE=15
     MYBLOG_COMMENT_PER_PAGE=15
+    # （‘theme name','display name')
+    MYBLOG_THEMES={'perfect_blue':'Perfect Blue','black_swan':'Black Swan'}
 
 class DevelopmentConfig(BaseConfig):
     SQLALCHEMY_DATABASE_URI='sqlite:///'+os.path.join(basedir,'data-dev.db')
