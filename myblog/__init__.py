@@ -3,7 +3,7 @@ from myblog.blueprints.auth import auth_bp
 from myblog.blueprints.admin import admin_bp
 from myblog.blueprints.blog import blog_bp
 from myblog.settings import config
-from myblog.extensions import bootstrap,mail,moment,db,ckeditor,migrate
+from myblog.extensions import bootstrap,mail,moment,db,ckeditor,migrate,login_manager
 from myblog.models import Admin,Category,Post,Comment
 import os,click
 
@@ -33,6 +33,7 @@ def register_extensions(app):
     moment.init_app(app)
     mail.init_app(app)
     migrate.init_app(app,db)
+    login_manager.init_app(app)
 
 def register_blueprints(app):
     app.register_blueprint(blog_bp)

@@ -1,8 +1,9 @@
 from myblog.extensions import db
 from datetime import datetime
 from werkzeug.security import generate_password_hash,check_password_hash
+from flask_login import UserMixin
 
-class Admin(db.Model):
+class Admin(db.Model,UserMixin):
     id=db.Column(db.Integer,primary_key=True)
     username=db.Column(db.String(20))
     password_hash=db.Column(db.String(128))

@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "e068604998291515a8b5f3a923662d91c0915ceee4bd1853a5fee9119b8d8138"
+            "sha256": "c082882096f8558f72dbb4b1c182d71dea97753195b66091a9081629611507cc"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -31,11 +31,11 @@
         },
         "bootstrap-flask": {
             "hashes": [
-                "sha256:26c61912fff4584e23472ae66f2d98a8d7340bc1c89b48d21e19acb900356b9b",
-                "sha256:3df7044dc9075c01e0c198450da2bd2b84e21a72c8e7cf6157ba51edb8a08ad9"
+                "sha256:a64368423512bff9e12b2d9f63be510bd3926f31e61b6be3760761d67a47a786",
+                "sha256:f5e75b7fb976ba2268eac88240e1a9b249c7848a0cb639f45a6be14d913c88c2"
             ],
             "index": "pypi",
-            "version": "==1.3.2"
+            "version": "==1.4"
         },
         "click": {
             "hashes": [
@@ -44,6 +44,22 @@
             ],
             "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3, 3.4'",
             "version": "==7.1.2"
+        },
+        "dnspython": {
+            "hashes": [
+                "sha256:36c5e8e38d4369a08b6780b7f27d790a292b2b08eea01607865bf0936c558e01",
+                "sha256:f69c21288a962f4da86e56c4905b49d11aba7938d3d740e80d9e366ee4f1632d"
+            ],
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
+            "version": "==1.16.0"
+        },
+        "email-validator": {
+            "hashes": [
+                "sha256:5f246ae8d81ce3000eade06595b7bb55a4cf350d559e890182a1466a21f25067",
+                "sha256:63094045c3e802c3d3d575b18b004a531c36243ca8d1cec785ff6bfcb04185bb"
+            ],
+            "index": "pypi",
+            "version": "==1.1.1"
         },
         "flask": {
             "hashes": [
@@ -107,6 +123,14 @@
             ],
             "index": "pypi",
             "version": "==0.14.3"
+        },
+        "idna": {
+            "hashes": [
+                "sha256:7588d1c14ae4c77d74036e8c22ff447b26d0fde8f007354fd48a7814db15b7cb",
+                "sha256:a068a21ceac8a4d63dbfd964670474107f541babbd2250d61922f029858365fa"
+            ],
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
+            "version": "==2.9"
         },
         "itsdangerous": {
             "hashes": [
