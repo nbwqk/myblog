@@ -47,3 +47,8 @@ class Comment(db.Model):
     replied_id=db.Column(db.Integer,db.ForeignKey('comment.id')) # 所回复的那个评论ID
     replied=db.relationship('Comment',back_populates='replies',remote_side=[id]) # 被回复评论的集合（单数）
     replies=db.relationship('Comment',back_populates='replied',cascade='all')    # 回复评论的评论集合（复数）
+
+class Link(db.Model):
+    id=db.Column(db.Integer,primary_key=True)
+    name=db.Column(db.String(30))
+    url=db.Column(db.String(255))

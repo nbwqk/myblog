@@ -1,10 +1,12 @@
 from flask import Flask,render_template
+from flask_login import current_user
+from flask_wtf.csrf import CSRFError
 from myblog.blueprints.auth import auth_bp
 from myblog.blueprints.admin import admin_bp
 from myblog.blueprints.blog import blog_bp
 from myblog.settings import config
 from myblog.extensions import bootstrap,mail,moment,db,ckeditor,migrate,login_manager,csrf
-from myblog.models import Admin,Category,Post,Comment
+from myblog.models import Admin,Category,Post,Comment,Link
 import os,click
 
 def create_app(config_name=None):
@@ -51,12 +53,30 @@ def register_template_context(app):
     def make_template_context():
         admin=Admin.query.first()
         categories=Category.query.order_by(Category.name).all()
-        return dict(admin=admin,categories=categories)
+        links=Link.query.order_by(Link.name).all()
+        if current_user.is_authenticated:
+            unread_comments=Comment.query.filter_by(reviewed=False).count()
+        else:
+            unread_comments=None
+        return dict(admin=admin,categories=categories,links=links,
+                    unread_comments=unread_comments)
 
 def register_errors(app):
     @app.errorhandler(400)
     def bad_request(e):
         return render_template('errors/400.html'),400
+
+    @app.errorhandler(404)
+    def page_not_found(e):
+        return render_template('errors/404.html'),404
+
+    @app.errorhandler(500)
+    def internal_server_error(e):
+        return render_template('errors/500.html'),500
+
+    @app.errorhandler(CSRFError)
+    def handle_csrf_error(e):
+        return render_template('errors/400.html',description=e.description),400
 
 def register_commands(app):
     @app.cli.command()
