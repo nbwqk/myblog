@@ -125,3 +125,36 @@ def new_category():
         flash('Category created.','success')
         return redirect(url_for('.manage.category'))
     return render_template('admin/new_category.html',form=form)
+
+@admin_bp.route('/category/<int:category_id>/edit',methods=['GET','POST'])
+@login_required
+def edit_category(category_id):
+    form=CategoryForm()
+    category=Category.query.get_or_404(category_id)
+    if category.id==1:
+        flash('You can not edit the default category.','warning')
+        return redirect(url_for('blog.index'))
+    if form.validate_on_submit():
+        category.name=form.name.data
+        db.session.commit()
+        flash('Category updated.','success')
+        return redirect(url_for('.manage_category'))
+
+    form.name.data=category.name
+    return render_template('admin/edit_category.html',form=form)
+
+@admin_bp.route('/category/<int:category_id>/delete',methods=['POST'])
+@login_required
+def delete_category(category_id):
+    category=Category.query.get_or_404(category_id)
+    if category.id==1:
+        flash('You can not delete the default category.','warning')
+        return redirect(url_for('blog.index'))
+    category.delete()
+    flash('Category delete.','success')
+    return redirect(url_for('.manage_category'))
+
+@admin_bp.route('/link/manage')
+@login_required
+def manage_link():
+    return render_template('admin/manage_link.html')
