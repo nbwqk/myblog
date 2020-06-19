@@ -4,6 +4,7 @@ from myblog.models import Post,Category,Comment
 from myblog.forms import AdminCommentForm,CommentForm
 from myblog.emails import send_new_reply_email,send_new_comment_email
 from myblog.utils import redirect_back
+from myblog.extensions import db
 
 blog_bp=Blueprint('blog',__name__)
 
@@ -28,7 +29,7 @@ def show_category(category_id):
     posts=pagination.items
     return render_template('blog/category.html',category=category,pagination=pagination,posts=posts)
 
-@blog_bp.route('/post/<int:post_id>')
+@blog_bp.route('/post/<int:post_id>',methods=['GET','POST'])
 def show_post(post_id):
     post=Post.query.get_or_404(post_id)
     page=request.args.get('page',1,type=int)
@@ -40,7 +41,7 @@ def show_post(post_id):
     if current_user.is_authenticated:
         form=AdminCommentForm()
         form.author.data=current_user.name
-        form.email.data=current_user.config['MYBLOG_EMAIL']
+        form.email.data = current_app.config['MYBLOG_EMAIL']
         form.site.data=url_for('.index')
         from_admin=True
         reviewed=True

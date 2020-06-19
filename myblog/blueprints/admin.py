@@ -1,11 +1,31 @@
-from flask import Blueprint,flash,current_app,render_template,request,redirect,url_for
-from flask_login import login_required
-from myblog.models import Post,Comment,Category
-from myblog.utils import redirect_back
+from flask import Blueprint,flash,current_app,render_template,request,redirect,url_for,send_from_directory
+from flask_login import login_required,current_user
+from myblog.models import Post,Comment,Category,Link
+from myblog.utils import redirect_back,allowed_file
 from myblog.extensions import db
-from myblog.forms import PostForm,CategoryForm
+from myblog.forms import PostForm,CategoryForm,LinkForm,SettingForm
+from flask_ckeditor import upload_fail,upload_success
+import os
 
 admin_bp=Blueprint('admin',__name__)
+
+@admin_bp.route('/settings',methods=['GET','POST'])
+@login_required
+def settings():
+    form=SettingForm()
+    if form.validate_on_submit():
+        current_user.name=form.name.data
+        current_user.blog_title=form.blog_title.data
+        current_user.blog_sub_title=form.blog_sub_title.data
+        current_user.about=form.about.data
+        db.session.commit()
+        flash('Setting updated.','success')
+        return redirect(url_for('blog.index'))
+    form.name.data=current_user.name
+    form.blog_title.data=current_user.blog_title
+    form.blog_sub_title=current_user.blog_sub_title
+    form.about.data=current_user.about
+    return render_template('admin/settings.html',form=form)
 
 @admin_bp.route('/post/<int:post_id>/delete',methods=['POST'])
 @login_required
@@ -119,11 +139,11 @@ def new_category():
     form=CategoryForm()
     if form.validate_on_submit():
         name=form.name.data
-        category=Categor(name=name)
+        category=Category(name=name)
         db.session.add(category)
         db.session.commit()
         flash('Category created.','success')
-        return redirect(url_for('.manage.category'))
+        return redirect(url_for('.manage_category'))
     return render_template('admin/new_category.html',form=form)
 
 @admin_bp.route('/category/<int:category_id>/edit',methods=['GET','POST'])
@@ -158,3 +178,54 @@ def delete_category(category_id):
 @login_required
 def manage_link():
     return render_template('admin/manage_link.html')
+
+@admin_bp.route('/link/new',methods=['GET','POST'])
+@login_required
+def new_link():
+    form=LinkForm()
+    if form.validate_on_submit():
+        name=form.name.data
+        url=form.url.data
+        link=Link(name=name,url=url)
+        db.session.add(link)
+        db.session.commit()
+        flash('Link created.','success')
+        return redirect(url_for('.manage_link'))
+    return render_template('admin/new_link.html',form=form)
+
+@admin_bp.route('/link/<int:link_id>/edit',methods=['GET','POST'])
+@login_required
+def edit_link(link_id):
+    form=LinkForm()
+    link=Link.query.get_or_404(link_id)
+    if form.validate_on_submit():
+        link.name=form.name.data
+        link.url=form.url.data
+        db.session.commit()
+        flash('Link updated.','success')
+        return redirect(url_for('.manage_link'))
+    form.name.data=link.name
+    form.url.data=link.url
+    return render_template('admin/edit_link.html',form=form)
+
+@admin_bp.route('/link/<int:link_id>/delete',methods=['POST'])
+@login_required
+def delete_link(link_id):
+    link=Link.query.get_or_404(link_id)
+    db.session.delete(link)
+    db.session.commit()
+    flash('Link delete.','success')
+    return redirect(url_for('.manage_link'))
+
+@admin_bp.route('/uploads/<path:filename>')
+def get_image(filename):
+    return send_from_directory(current_app.config['MYBLOG_UPLOAD_PATH'],filename)
+
+@admin_bp.route('/upload',methods=['POST'])
+def upload_image():
+    f=request.files.get('upload')
+    if not allowed_file(f.filename):
+        return upload_fail('Image only!')
+    f.save(os.path.join(current_app.config['MYBLOG_UPLOAD_PAHT'],f.filename))
+    url=url_for('.get_image',filename=f.filename)
+    return upload_success(url,f.filename)
